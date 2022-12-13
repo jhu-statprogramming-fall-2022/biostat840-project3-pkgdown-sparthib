@@ -159,20 +159,23 @@ euro_true_and_false <- euro_true_and_false |> mutate(prop = n.x/(n.x + n.y) )
 
 Let's look at proportion of instances where country was top 5
 
-```{R false, true }
+```{R proportion}
 
 g_2 <- ggplot(euro_true_and_false, aes(x = artist_country, y = prop)) + geom_point() +scale_x_discrete(label=abbreviate) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 6)) + labs(title= "Proportion of instances where country was Top 5", subtitle= " 47 countries", caption = "sourced from tidytuesday")
 g_2
 ```
-```{R }
-
-
+```{R true}
+euro_won <- euro |> group_by(winner, artist_country) |> summarise(n = n()) |> filter(winner == TRUE)
+g_3 <- ggplot(euro_won, aes(x = n)) + geom_dotplot(binwidth = 0.5) +scale_x_discrete(label=abbreviate) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 6)) + labs(title= "Frequency of number of times countries won", subtitle= "49 countries", caption = "sourced from tidytuesday")
+g_3
 ```
+
 
 
 ## Functions used 
 
 dplyr:: distinct, across, select , group_by, summarise, n, group_split, inner_join, mutate
 purrr:: map, map_lgl
-ggplot:: geom_bar, geom_point
+ggplot:: geom_bar, geom_point, geom_dotplot
