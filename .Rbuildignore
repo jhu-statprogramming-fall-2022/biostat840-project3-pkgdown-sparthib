@@ -13,3 +13,5 @@
 ^log.txt$
 ^generate_docs.R$
 ^\.github$
+^_pkgdown\.yml$
+^pkgdown$
