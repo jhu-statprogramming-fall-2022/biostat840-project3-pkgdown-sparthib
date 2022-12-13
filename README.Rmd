@@ -2,6 +2,22 @@
 output: github_document
 ---
 
+[Link](https://github.com/elbersb/tidylog) to where the original R package came from.
+
+[Deployed website](https://jhu-statprogramming-fall-2022.github.io/biostat840-project3-pkgdown-sparthib/) that you will do in Part 1E.
+
+#### 5 things customized:
+
+1.  Background color
+
+2.   Foreground color
+
+3.  Primary Color
+
+4.  Navigation bar structure
+
+5.  Home sidebar structure
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r setup, include = FALSE}
@@ -12,12 +28,10 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+
 # tidylog
 
-[![CRAN Version](https://www.r-pkg.org/badges/version/tidylog)](https://CRAN.R-project.org/package=tidylog)
-[![Downloads](http://cranlogs.r-pkg.org/badges/tidylog)](https://CRAN.R-project.org/package=tidylog)
-[![R-CMD-check](https://github.com/elbersb/tidylog/workflows/R-CMD-check/badge.svg)](https://github.com/elbersb/tidylog/actions)
-[![Coverage status](https://codecov.io/gh/elbersb/tidylog/branch/master/graph/badge.svg)](https://codecov.io/github/elbersb/tidylog?branch=master)
+[![CRAN Version](https://www.r-pkg.org/badges/version/tidylog)](https://CRAN.R-project.org/package=tidylog) [![Downloads](http://cranlogs.r-pkg.org/badges/tidylog)](https://CRAN.R-project.org/package=tidylog) [![R-CMD-check](https://github.com/elbersb/tidylog/workflows/R-CMD-check/badge.svg)](https://github.com/elbersb/tidylog/actions) [![Coverage status](https://codecov.io/gh/elbersb/tidylog/branch/master/graph/badge.svg)](https://codecov.io/github/elbersb/tidylog?branch=master)
 
 The goal of tidylog is to provide feedback about dplyr and tidyr operations. It provides simple wrapper functions for almost all dplyr and tidyr functions, such as `filter`, `mutate`, `select`, `full_join`, and `group_by`.
 
@@ -58,6 +72,7 @@ summary <- mtcars %>%
     tally() %>%
     filter(n >= 1)
 ```
+
 Here, it might have been accidental that the last `filter` command had no effect.
 
 ## Installation
@@ -72,165 +87,4 @@ Or install the development version:
 
 ``` r
 devtools::install_github("elbersb/tidylog")
-```
-
-## Benchmarks
-
-Tidylog will add a small overhead to each function call. This can be relevant for very large datasets and especially for joins. If you want to switch off tidylog for a single long-running command, simply prefix `dplyr::` or `tidyr::`, such as in `dplyr::left_join`. See [this vignette](https://cran.r-project.org/web/packages/tidylog/vignettes/benchmarks.html) for more information.
-
-## More examples
-
-### filter, distinct, drop_na
-
-```{r}
-a <- filter(mtcars, mpg > 20)
-b <- filter(mtcars, mpg > 100)
-c <- filter(mtcars, mpg > 0)
-d <- filter_at(mtcars, vars(starts_with("d")), any_vars((. %% 2) == 0))
-e <- distinct(mtcars)
-f <- distinct_at(mtcars, vars(vs:carb))
-g <- top_n(mtcars, 2, am)
-i <- sample_frac(mtcars, 0.5)
-
-j <- drop_na(airquality)
-k <- drop_na(airquality, Ozone)
-```
-
-### mutate, transmute, replace_na, fill
-
-```{r}
-a <- mutate(mtcars, new_var = 1)
-b <- mutate(mtcars, new_var = runif(n()))
-c <- mutate(mtcars, new_var = NA)
-d <- mutate_at(mtcars, vars(mpg, gear, drat), round)
-e <- mutate(mtcars, am_factor = as.factor(am))
-f <- mutate(mtcars, am = as.ordered(am))
-g <- mutate(mtcars, am = ifelse(am == 1, NA, am))
-h <- mutate(mtcars, am = recode(am, `0` = "zero", `1` = NA_character_))
-
-i <- transmute(mtcars, mpg = mpg * 2, gear = gear + 1, new_var = vs + am)
-
-j <- replace_na(airquality, list(Solar.R = 1))
-k <- fill(airquality, Ozone)
-```
-
-### joins
-
-For joins, tidylog provides more detailed information. For any join,
-tidylog will show the number of rows
-that are only present in x (the first dataframe), only present in y (the second dataframe),
-and rows that have been matched. Numbers in parentheses indicate that these rows are not
-included in the result. Tidylog will also indicate whether any rows were duplicated
-(which is often unintentional):
-
-```{r}
-x <- tibble(a = 1:2)
-y <- tibble(a = c(1, 1, 2), b = 1:3) # 1 is duplicated
-j <- left_join(x, y, by = "a")
-```
-
-More examples:
-
-```{r}
-a <- left_join(band_members, band_instruments, by = "name")
-b <- full_join(band_members, band_instruments, by = "name")
-c <- anti_join(band_members, band_instruments, by = "name")
-```
-
-Because tidylog needs to perform two additional joins behind the scenes to report this information,
-the overhead will be larger than for the other tidylog functions (especially with large datasets).
-
-### select, relocate, rename
-
-```{r}
-a <- select(mtcars, mpg, wt)
-b <- select_if(mtcars, is.character)
-c <- relocate(mtcars, hp)
-d <- select(mtcars, a = wt, b = mpg)
-
-e <- rename(mtcars, miles_per_gallon = mpg)
-f <- rename_with(mtcars, toupper)
-```
-
-### summarize
-
-```{r}
-a <- mtcars %>%
-    group_by(cyl, carb) %>%
-    summarize(total_weight = sum(wt))
-
-b <- iris %>%
-    group_by(Species) %>%
-    summarize_all(list(min, max))
-```
-
-### tally, count, add_tally, add_count
-
-```{r}
-a <- mtcars %>% group_by(gear, carb) %>% tally
-b <- mtcars %>% group_by(gear, carb) %>% add_tally()
-
-c <- mtcars %>% count(gear, carb)
-d <- mtcars %>% add_count(gear, carb, name = "count")
-```
-
-### pivot_longer, pivot_wider
-
-```{r}
-longer <- mtcars %>%
-    mutate(id = 1:n()) %>%
-    pivot_longer(-id, names_to = "var", values_to = "value")
-wider <- longer %>%
-    pivot_wider(names_from = var, values_from = value)
-```
-
-Tidylog also supports `gather` and `spread`.
-
-## Turning logging off, registering additional loggers
-
-To turn off the output for just a particular function call, you can simply call the dplyr and tidyr functions
-directly, e.g. `dplyr::filter` or `tidyr::drop_na`.
-
-To turn off the output more permanently, set the global option `tidylog.display` to an empty list:
-
-```{r}
-options("tidylog.display" = list())  # turn off
-a <- filter(mtcars, mpg > 20)
-
-options("tidylog.display" = NULL)    # turn on
-a <- filter(mtcars, mpg > 20)
-```
-
-This option can also be used to register additional loggers. The option `tidylog.display` expects
-a list of functions. By default (when `tidylog.display` is set to NULL), tidylog
-will use the `message` function to display the output, but if you prefer a more colorful output,
-simply overwrite the option:
-
-```{r}
-library("crayon")  # for terminal colors
-crayon <- function(x) cat(red$bold(x), sep = "\n")
-options("tidylog.display" = list(crayon))
-a <- filter(mtcars, mpg > 20)
-```
-
-To print the output both to the screen and to a file, you could use:
-
-```{r}
-log_to_file <- function(text) cat(text, file = "log.txt", sep = "\n", append = TRUE)
-options("tidylog.display" = list(message, log_to_file))
-a <- filter(mtcars, mpg > 20)
-```
-
-## Namespace conflicts
-
-Tidylog redefines several of the functions exported by dplyr and tidyr, so it should be loaded last, otherwise there will be no output. A more explicit way to resolve namespace conflicts is to use the [conflicted](https://CRAN.R-project.org/package=conflicted) package:
-
-``` r
-library("dplyr")
-library("tidyr")
-library("tidylog")
-library("conflicted")
-for (f in getNamespaceExports("tidylog")) {
-    conflicted::conflict_prefer(f, "tidylog", quiet = TRUE)
-}
 ```
