@@ -10,7 +10,7 @@ output: github_document
 
 1.  Background color
 
-2.   Foreground color
+2.  Foreground color
 
 3.  Primary Color
 

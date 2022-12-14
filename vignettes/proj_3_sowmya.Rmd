@@ -1,7 +1,8 @@
 ---
 title: "proj_3_sowmya"
-format: html
-editor: visual
+author: "Sowmya Parthiban"
+date: "2022-12-14"
+output: html_document
 ---
 
 For an example analysis using `tidylog` I'll be using the `eurovision` dataset found in `tidytuesday`. The dataset and dictionarycan be found [here.](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-05-17)
@@ -174,4 +175,6 @@ g_3
 
 ## Functions used
 
-dplyr:: distinct, across, select , group_by, summarise, n, group_split, inner_join, mutate purrr:: map, map_lgl ggplot:: geom_bar, geom_point, geom_dotplot
+dplyr:: distinct, across, select , group_by, summarise, n, group_split, inner_join, mutate 
+purrr:: map, map_lgl 
+ggplot:: geom_bar, geom_point, geom_dotplot
